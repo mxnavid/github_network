@@ -9,6 +9,5 @@ octokit.repos
     type: "public",
   })
   .then(({ data }) => {
-  	console.log('ayylmao');
     console.log(data);
   });
