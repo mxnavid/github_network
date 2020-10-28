@@ -6,10 +6,15 @@ function sankey(d) {
       .nodeWidth(15)
       .nodePadding(10)
       .extent([[1, 5], [width - 1, height - 5]]);
-  return ({nodes, links}) => sankey({
-    nodes: nodes.map(d => Object.assign({}, d)),
-    links: links.map(d => Object.assign({}, d))
-  });
+  
+      // return ({nodes, links}) => sankey({
+    
+      // });
+
+      return {
+        nodes: d.nodes.map(d => Object.assign({}, d)),
+        links: d.links.map(d => Object.assign({}, d))
+      }
 }
 
 function color(d) {
@@ -24,7 +29,7 @@ function format(d) {
 
 
 async function data() {
-  d3.csv("data/energy.csv").then(data => {
+  return d3.csv("data/energy.csv").then(data => {
     for(var entry of data) {
       entry.value = parseFloat(entry.value);
     }
@@ -42,6 +47,7 @@ function chart(data) {
   const svg = d3.create("svg")
       .attr("viewBox", [0, 0, width, height]);
 
+  // console.log(data);
   const {nodes, links} = sankey(data);
 
   svg.append("g")
@@ -110,5 +116,10 @@ function chart(data) {
 document.addEventListener('DOMContentLoaded', (ev) => {
   width = 954;
   height = 600;
-  // chart().then(svg => )
+
+  data().then(d => {
+    window.lol = d;
+    var s = chart(d);
+    
+  })
 })
