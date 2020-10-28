@@ -7,9 +7,9 @@ from gather import *
 
 app = Flask(__name__)
 
-@app.route('/')
-def index():
-    return 'hello, world'
+# @app.route('/')
+# def index():
+#     return 'hello, world'
 
 # http://localhost:5000/contributors/react
 @app.route('/contributors/<repo>')
@@ -18,8 +18,27 @@ def users(repo):
         getUsers(f'data/{repo}_contributors.json')
     )
 
-@app.route('/repos.json')
+@app.route('/repos')
 def repos():
-    return jsonify(
-        getUsers('data/flutter_contributors.json')
-    )
+    repos = ['flutter', 'react', 'kubernetes']
+    data = []
+    for repo in repos:
+        r = []
+        contributors = getUsers(f'data/{repo}_contributors.json')
+        
+        for contributor in contributors:
+            r.append({
+                'name': contributor,
+                'value': 1000
+            })
+        
+        data.append({
+            'name': repo,
+            'children': r
+        })
+    
+    return jsonify({
+        'name': 'repos',
+        'children': data
+    })
+
