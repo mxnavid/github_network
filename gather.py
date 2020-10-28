@@ -12,10 +12,11 @@ def getUsers(fileName):
 def getCompany(user):
     file = open("data/UserCompany.json", "r")
     data = json.loads(file.read())
-    print(data[user])
-    # for idx in data:
-    #     print(idx[user])
-    #     break     
+    username = data[user]
+    if "@" in username:
+        username = username.replace("@","")
+    username = username.lower()
+    return username
 
 def finder_file(repo_name):
     if repo_name == "Fluter":
@@ -34,10 +35,10 @@ def finder_file(repo_name):
     
 
 # def main():
-#     file_name = "data/flutter_contributors.json"
-#     logins = getUsers(file_name)
-#     user = "caitp"
-#     getCompany(user)
-    
+#     # file_name = "data/flutter_contributors.json"
+#     # logins = getUsers(file_name)
+#     user = "andy-ms"
+#     a = getCompany(user)
+#     print(a)
 # main()
 
