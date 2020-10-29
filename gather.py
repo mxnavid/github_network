@@ -36,11 +36,11 @@ def finder_file(repo_name):
     return "Not Found"
     
 
-def main():
-    # file_name = "data/flutter_contributors.json"
-    # logins = getUsers(file_name)
-    user = "Jack-Works"
-    a = getCompany(user)
-    print(a)
-main()
+# def main():
+#     # file_name = "data/flutter_contributors.json"
+#     # logins = getUsers(file_name)
+#     user = "Jack-Works"
+#     a = getCompany(user)
+#     print(a)
+# main()
 
