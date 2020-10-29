@@ -13,6 +13,8 @@ def getCompany(user):
     file = open("data/UserCompany.json", "r")
     data = json.loads(file.read())
     username = data[user]
+    if username == None:
+        return "Unknown Company"
     if "@" in username:
         username = username.replace("@","")
     username = username.lower()
@@ -34,11 +36,11 @@ def finder_file(repo_name):
     return "Not Found"
     
 
-# def main():
-#     # file_name = "data/flutter_contributors.json"
-#     # logins = getUsers(file_name)
-#     user = "andy-ms"
-#     a = getCompany(user)
-#     print(a)
-# main()
+def main():
+    # file_name = "data/flutter_contributors.json"
+    # logins = getUsers(file_name)
+    user = "Jack-Works"
+    a = getCompany(user)
+    print(a)
+main()
 
