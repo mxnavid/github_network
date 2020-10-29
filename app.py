@@ -25,12 +25,35 @@ def repos():
     for repo in repos:
         r = []
         contributors = getUsers(f'data/{repo}_contributors.json')
+        companies = {}
         
         for contributor in contributors:
-            r.append({
-                'name': contributor,
-                'value': 1000
+            company = getCompany(contributor)
+            if company not in companies:
+                companies[company] = [contributor]
+            else:
+                companies[company].append(contributor)
+                 
+            # r.append({
+            #     'name': contributor,
+            #     'value': 1000
+            # })
+        
+        repo_children = []
+        for company, contribs in companies.items():
+            contributor_children = []
+            for c in contribs:
+                contributor_children.append({
+                    'name': c,
+                    'value': 1000
+                })
+            
+            repo_children.append({
+                'name': company,
+                'children': contributor_children
             })
+        
+        r = repo_children
         
         data.append({
             'name': repo,
