@@ -1,5 +1,11 @@
-import json
+import json         # Json library
 
+
+""" 
+    This function returns list of user for a given file.
+    Input: File Name (str)
+    Return : List of users in str (list)
+"""
 def getUsers(fileName):
     file = open(fileName, "r")
     data = json.loads(file.read())
@@ -9,6 +15,12 @@ def getUsers(fileName):
 
     return logins
 
+
+"""
+    This fucntion returns the name of the company the user is associated with. 
+    Input: UserName (str)
+    Return: Comany Name (str)
+"""
 def getCompany(user):
     file = open("data/UserCompany.json", "r")
     data = json.loads(file.read())
@@ -19,6 +31,13 @@ def getCompany(user):
         username = username.replace("@","")
     username = username.lower()
     return username
+
+
+"""
+    This function returns the path of the file with repo name
+    Input: Repo Name (str)
+    Output: Path of the repo (str)
+"""
 
 def finder_file(repo_name):
     if repo_name == "Fluter":
@@ -36,11 +55,4 @@ def finder_file(repo_name):
     return "Not Found"
     
 
-# def main():
-#     # file_name = "data/flutter_contributors.json"
-#     # logins = getUsers(file_name)
-#     user = "Jack-Works"
-#     a = getCompany(user)
-#     print(a)
-# main()
 
