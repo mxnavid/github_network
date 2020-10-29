@@ -64,7 +64,7 @@ function chart(data) {
 
 document.addEventListener('DOMContentLoaded', (ev) => {
     d3.json('/repos').then(data => {
-        window.width = 2000;
+        window.width = 1000;
         var s = chart(data);
         console.log(s);
         document.body.append(s);
