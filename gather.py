@@ -11,7 +11,7 @@ def getUsers(fileName):
     data = json.loads(file.read())
     logins = []
     for idx in data:
-        logins.append(idx["login"])
+        logins.append(idx)
 
     return logins
 
