@@ -28,6 +28,8 @@ def get_extension_count_dict(files):
 
 def json_resp(extensions):
 	data = []
+	m = 0
+
 	for ext, count in extensions.items():
 		if count > 3:
 			data.append({
@@ -35,10 +37,12 @@ def json_resp(extensions):
 				'Value': count
 				})
 
-	return {'data': data}
+			m = max(m, count)
+
+	return {'data': data, 'max': m}
 
 def ext_resp():
-	folder = 'go'
+	folder = 'react'
 	repo = './repos/'+folder
 	files = get_files(repo)
 	extensions = get_extension_count_dict(files)

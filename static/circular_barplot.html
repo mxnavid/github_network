@@ -12,10 +12,12 @@
 
 <script>
 
-// set the dimensions and margins of the graph
+fetch('/extensions').then(d => d.json()).then(x => {
+	var m = x.max;
+	// set the dimensions and margins of the graph
 var margin = {top: 100, right: 100, bottom: 0, left: 0},
-    width = 860 - margin.left - margin.right,
-    height = 460 - margin.top - margin.bottom,
+    width = 1260 - margin.left - margin.right,
+    height = 860 - margin.top - margin.bottom,
     innerRadius = 90,
     outerRadius = Math.min(width, height) / 2;   // the outerRadius goes from the middle of the SVG area to the border
 
@@ -37,7 +39,7 @@ d3.json("/extensions", function(data) {
       .domain(data.map(function(d) { return d.Country; })); // The domain of the X axis is the list of states.
   var y = d3.scaleRadial()
       .range([innerRadius, outerRadius])   // Domain will be define later.
-      .domain([0, 2000]); // Domain of Y is from 0 to the max seen in the data
+      .domain([0, m]); // Domain of Y is from 0 to the max seen in the data
 
   // Add the bars
   svg.append("g")
@@ -68,6 +70,7 @@ d3.json("/extensions", function(data) {
         .style("font-size", "11px")
         .attr("alignment-baseline", "middle")
 
+});
 });
 
 </script>
