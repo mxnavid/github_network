@@ -1,5 +1,6 @@
 from flask import Flask, jsonify
 from gather import *
+import local
 
 # pip install Flask
 # export FLASK_APP='app.py'
@@ -64,4 +65,13 @@ def repos():
         'name': 'repos',
         'children': data
     })
+
+@app.route('/authors')
+def authors():
+    r = local.authors_resp()
+    return jsonify(r)
+
+if __name__ == '__main__':
+    app.run()
+
 
