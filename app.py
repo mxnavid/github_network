@@ -1,6 +1,7 @@
 from flask import Flask, jsonify
 from gather import *
 import local
+import files
 
 # pip install Flask
 # export FLASK_APP='app.py'
@@ -70,6 +71,11 @@ def repos():
 def authors():
     r = local.authors_resp()
     return jsonify(r)
+
+@app.route('/extensions')
+def extensions():
+    e = files.ext_resp()
+    return jsonify(e)
 
 if __name__ == '__main__':
     app.run()
