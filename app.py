@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from gather import *
 import local
 import files
@@ -69,13 +69,22 @@ def repos():
 
 @app.route('/authors')
 def authors():
-    r = local.authors_resp()
+    r = local.authors_resp(request.args['repo'])
     return jsonify(r)
 
 @app.route('/extensions')
 def extensions():
-    e = files.ext_resp()
+    e = files.ext_resp(request.args['repo'])
     return jsonify(e)
+
+@app.route('/weekday_commits')
+def weekday_commits():
+    e = local.weekday_resp(request.args['repo'])
+    return jsonify(e)
+
+@app.route('/author_weekday_3d')
+def author_weekday_3d():
+    local.author_weekday_3d(request.args['repo'])
 
 if __name__ == '__main__':
     app.run()

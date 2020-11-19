@@ -60,8 +60,65 @@ def generate_authors_json(authors):
 	hours = [str(_) for _ in range(24)]
 	return {'data': data, 'authors': uniques, 'hours': hours}
 
-def authors_resp():
-	folder = 'vscode'
+def per_day_commits(commits):
+	weekdays = {}
+	
+	for commit in commits:
+		t = commit.committed_datetime
+		weekday = t.strftime('%A')
+		hour = t.hour
+
+		if weekday not in weekdays:
+			weekdays[weekday] = {}
+			for h in range(24):
+				weekdays[weekday][h] = 0
+
+		weekdays[weekday][hour] += 1
+
+	data = []
+	for weekday, hours in weekdays.items():
+		for hour in hours.keys():
+			count = hours[hour]
+			data.append({
+				'author': weekday,
+				'hour': hour,
+				'count': count
+				})
+
+	hours = [str(_) for _ in range(24)]
+	return {'data': data, 'hours': hours}
+
+def threeD_dict(commits):
+	authors = []
+	hours = []
+	weekdays = []
+
+	for commit in commits:
+		author = commit.author.name
+		hour = commit.committed_datetime.hour
+		weekday = commit.committed_datetime.strftime('%A')
+
+		authors.append(author)
+		hours.append(hour)
+		weekdays.append(weekday)
+
+	dct = {'authors': authors, 'hours': hours, 'weekdays': weekdays}
+
+	import plotly.express as px
+	import pandas as pd
+
+	fig = px.scatter_3d(pd.DataFrame.from_dict(dct), x='authors', y='hours', z='weekdays', color='hours')
+	print(fig.show())
+
+def author_weekday_3d(folder):
+	commits = get_commit_data(folder)
+	threeD_dict(commits)
+
+def weekday_resp(folder):
+	commits = get_commit_data(folder)
+	return per_day_commits(commits)
+
+def authors_resp(folder):
 	commits = get_commit_data(folder)
 	authors = get_authors_dict(commits)
 	return generate_authors_json(authors)
@@ -69,9 +126,7 @@ def authors_resp():
 def main():
 	folder = 'react'
 	commits = get_commit_data(folder)
-	authors = get_authors_dict(commits)
-	d =generate_authors_json(authors)
-	print(d)
+	threeD_dict(commits)
 
 if __name__ == '__main__':
 	main()

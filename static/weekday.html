@@ -11,8 +11,8 @@
 
 
 <script>
-  var u = new URLSearchParams(window.location.search);
-fetch('/authors?repo=' + u.get('repo')).then(response => response.json()).then(dx => {
+	var u = new URLSearchParams(window.location.search);
+fetch('/weekday_commits?repo=' + u.get('repo')).then(response => response.json()).then(dx => {
 		// set the dimensions and margins of the graph
 var margin = {top: 30, right: 30, bottom: 30, left: 90},
   width = 900 - margin.left - margin.right,
@@ -31,7 +31,8 @@ var svg = d3.select("#my_dataviz")
 // var myGroups = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
 // var myVars = ["v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10"]
 var myGroups = dx.hours;
-var myVars = dx.authors;
+// var myVars = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+var myVars = ['Sunday', 'Saturday', 'Friday', 'Thursday', 'Wednesday', 'Tuesday', 'Monday']
 
 // Build X scales and axis:
 var x = d3.scaleBand()
@@ -73,7 +74,7 @@ var myColor = d3.scaleLinear()
 // })
 
 
-d3.json('/authors?repo=' + u.get('repo'), function(data) {
+d3.json("/weekday_commits?repo=" + u.get('repo'), function(data) {
 
 	data = data.data;
 
