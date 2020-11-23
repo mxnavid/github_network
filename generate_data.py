@@ -28,11 +28,7 @@ for file in listOfFiles:
             
             # Create another get request to get the organization data. This is commented out to prevent rate limits
             # orgs = requests.get('https://api.github.com/users/{0}/orgs'.format(username), headers={'Authorization': 'Bearer {}'.format(token)})
-            # mapOfUserOrg[username] = orgs.json()
-
-
-
-
+            mapOfUserOrg[username] = orgs.json()
 
 # # Dump the maps into json files
 with open("data/UserObjects.json", "w") as outfile:
@@ -42,19 +38,17 @@ with open("data/UserCompany.json", "w") as outfile:
     json.dump(mapOfUserCompany, outfile)
 
 # with open("UserOrg.json", "w") as outfile:
-#     json.dump(mapOfUserOrg, outfile)
+    json.dump(mapOfUserOrg, outfile)
 
 # This is for going through the pages
-# mapOfUsers = {}
+mapOfUsers = {}
 
-# for x in range(1,6):
-#     r = requests.get('https://api.github.com/repos/kubernetes/kubernetes/contributors?per_page=100&page={}'.format(x) ,headers={'Authorization': 'Bearer {}'.format(token)})
-#     response = r.json()
-#     for object in response:
-#         mapOfUsers[str(object['login'])] = object
+for x in range(1,6):
+    r = requests.get('https://api.github.com/repos/kubernetes/kubernetes/contributors?per_page=100&page={}'.format(x) ,headers={'Authorization': 'Bearer {}'.format(token)})
+    response = r.json()
+    for object in response:
+        mapOfUsers[str(object['login'])] = object
 
 # print(len(mapOfUsers))
-# with open("data/kubernetes_contributors.json", "w") as outfile:
-#     json.dump(mapOfUsers, outfile)
-
-
+with open("data/kubernetes_contributors.json", "w") as outfile:
+    json.dump(mapOfUsers, outfile)

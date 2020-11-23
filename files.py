@@ -1,5 +1,6 @@
 import os
 
+# Get all files and files within subfolders in directory
 def get_files(folder):
 	files = []
 
@@ -8,11 +9,13 @@ def get_files(folder):
 
 	return files
 
+# Get the file extension for a full path filename string
 def file_extension(filename):
 	path_list = filename.split('/')
 	file = path_list[-1]
 	return file.split('.')[-1]
 
+# Aggregate counts of file extensions in files list
 def get_extension_count_dict(files):
 	extensions = {}
 
@@ -26,6 +29,7 @@ def get_extension_count_dict(files):
 
 	return extensions
 
+# Prepare JSON response
 def json_resp(extensions):
 	data = []
 	m = 0

@@ -3,23 +3,16 @@ from gather import *
 import local
 import files
 
-# pip install Flask
-# export FLASK_APP='app.py'
-# flask run
-
 app = Flask(__name__)
 
-# @app.route('/')
-# def index():
-#     return 'hello, world'
-
-# http://localhost:5000/contributors/react
+# Github API contributor data
 @app.route('/contributors/<repo>')
 def users(repo):
     return jsonify(
         getUsers(f'data/{repo}_contributors.json')
     )
 
+# Aggregate Github repository data
 @app.route('/repos')
 def repos():
     repos = ['flutter', 'react', 'kubernetes']
@@ -35,11 +28,6 @@ def repos():
                 companies[company] = [contributor]
             else:
                 companies[company].append(contributor)
-                 
-            # r.append({
-            #     'name': contributor,
-            #     'value': 1000
-            # })
         
         repo_children = []
         for company, contribs in companies.items():
@@ -67,21 +55,25 @@ def repos():
         'children': data
     })
 
+# Get commit-level author data
 @app.route('/authors')
 def authors():
     r = local.authors_resp(request.args['repo'])
     return jsonify(r)
 
+# Repository file extension statistics
 @app.route('/extensions')
 def extensions():
     e = files.ext_resp(request.args['repo'])
     return jsonify(e)
 
+# Commit-level data over days of the week
 @app.route('/weekday_commits')
 def weekday_commits():
     e = local.weekday_resp(request.args['repo'])
     return jsonify(e)
 
+# 3d scatter plot of weekday and author commit-level data
 @app.route('/author_weekday_3d')
 def author_weekday_3d():
     local.author_weekday_3d(request.args['repo'])
@@ -90,5 +82,3 @@ def author_weekday_3d():
 
 if __name__ == '__main__':
     app.run()
-
-

@@ -1,10 +1,11 @@
 from git import *
-# import matplotlib.pyplot as plt
 
+# Use PythonGit to retreive commit history data
 def get_commit_data(folder, count=10000):
 	repo = Repo('./repos/'+folder)
 	return list(repo.iter_commits('master', max_count=count))
 
+# Filter all authors to only most active
 def filter_authors(authors):
 	filtered = {}
 	limit = 50
@@ -20,6 +21,7 @@ def filter_authors(authors):
 
 	return filtered
 
+# Generate commit-level author dara
 def get_authors_dict(commits):
 	hours = [0 for _ in range(24)]
 	authors = {}
@@ -41,6 +43,7 @@ def get_authors_dict(commits):
 
 	return filter_authors(authors)
 
+# Prepare authors data JSON response
 def generate_authors_json(authors):
 	data = []
 	uniques = []
@@ -60,6 +63,7 @@ def generate_authors_json(authors):
 	hours = [str(_) for _ in range(24)]
 	return {'data': data, 'authors': uniques, 'hours': hours}
 
+# Aggregate commit level data over days of the week
 def per_day_commits(commits):
 	weekdays = {}
 	
@@ -88,6 +92,7 @@ def per_day_commits(commits):
 	hours = [str(_) for _ in range(24)]
 	return {'data': data, 'hours': hours}
 
+# Prepare weekday commit-level data JSON response
 def author_weekday_dict(commits):
 	authors = []
 	hours = []
@@ -106,6 +111,7 @@ def author_weekday_dict(commits):
 
 	return {'authors': authors, 'hours': hours, 'weekdays': weekdays, 'count': count}
 
+# Generate plotly 3D scatter plot
 def threeD_dict(commits):
 	dct = author_weekday_dict(commits)
 	import plotly.express as px
@@ -113,30 +119,17 @@ def threeD_dict(commits):
 	fig = px.scatter_3d(pd.DataFrame.from_dict(dct), x='authors', y='hours', z='weekdays', color='count')
 	fig.show()
 
-def parallel_coords(commits):
-	dct = author_weekday_dict(commits)
-	import plotly.express as px
-	import pandas as pd
-
-	df = pd.DataFrame.from_dict(dct)
-	print(df)
-	# fig = px.parallel_coordinates(df, color='hours', color_continuous_scale=px.colors.diverging.Tealrose, color_continuous_midpoint=2,
-	# 	labels={'hours': 'Hour', 'authors': 'Authors', 'weekdays': 'Weekday'})
-	# fig.show()
-	# df = px.data.iris()
-	fig = px.parallel_coordinates(df[['hours']],
-	                             color_continuous_scale=px.colors.diverging.Tealrose,
-	                             color_continuous_midpoint=2)
-	fig.show()
-
+# Run 3d scatter plot
 def author_weekday_3d(folder):
 	commits = get_commit_data(folder, 1000)
 	threeD_dict(commits)
 
+# Return weekday commit-level data
 def weekday_resp(folder):
 	commits = get_commit_data(folder)
 	return per_day_commits(commits)
 
+# Return author commit-level data
 def authors_resp(folder):
 	commits = get_commit_data(folder)
 	authors = get_authors_dict(commits)
@@ -145,7 +138,6 @@ def authors_resp(folder):
 def main():
 	folder = 'react'
 	commits = get_commit_data(folder, 1000)
-	# parallel_coords(commits)
 	threeD_dict(commits)
 
 if __name__ == '__main__':
