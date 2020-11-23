@@ -11,8 +11,8 @@
 <div id="my_dataviz"></div>
 
 <script>
-
-fetch('/extensions').then(d => d.json()).then(x => {
+var u = new URLSearchParams(window.location.search);
+fetch('/extensions?repo=' + u.get('repo')).then(d => d.json()).then(x => {
 	var m = x.max;
 	// set the dimensions and margins of the graph
 var margin = {top: 100, right: 100, bottom: 0, left: 0},
@@ -29,7 +29,7 @@ var svg = d3.select("#my_dataviz")
   .append("g")
     .attr("transform", "translate(" + (width / 2 + margin.left) + "," + (height / 2 + margin.top) + ")");
 
-d3.json("/extensions", function(data) {
+d3.json("/extensions?repo=" + u.get('repo'), function(data) {
 	data = data.data;
 
   // Scales

@@ -86,6 +86,8 @@ def weekday_commits():
 def author_weekday_3d():
     local.author_weekday_3d(request.args['repo'])
 
+    return jsonify({'success': True})
+
 if __name__ == '__main__':
     app.run()
 

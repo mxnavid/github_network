@@ -41,8 +41,8 @@ def json_resp(extensions):
 
 	return {'data': data, 'max': m}
 
-def ext_resp():
-	folder = 'react'
+def ext_resp(folder):
+	# folder = 'react'
 	repo = './repos/'+folder
 	files = get_files(repo)
 	extensions = get_extension_count_dict(files)

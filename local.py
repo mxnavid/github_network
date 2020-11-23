@@ -1,9 +1,9 @@
 from git import *
 # import matplotlib.pyplot as plt
 
-def get_commit_data(folder):
+def get_commit_data(folder, count=10000):
 	repo = Repo('./repos/'+folder)
-	return list(repo.iter_commits('master', max_count=1000))
+	return list(repo.iter_commits('master', max_count=count))
 
 def filter_authors(authors):
 	filtered = {}
@@ -88,10 +88,11 @@ def per_day_commits(commits):
 	hours = [str(_) for _ in range(24)]
 	return {'data': data, 'hours': hours}
 
-def threeD_dict(commits):
+def author_weekday_dict(commits):
 	authors = []
 	hours = []
 	weekdays = []
+	count = []
 
 	for commit in commits:
 		author = commit.author.name
@@ -101,17 +102,35 @@ def threeD_dict(commits):
 		authors.append(author)
 		hours.append(hour)
 		weekdays.append(weekday)
+		count.append(abs(hour - 15))
 
-	dct = {'authors': authors, 'hours': hours, 'weekdays': weekdays}
+	return {'authors': authors, 'hours': hours, 'weekdays': weekdays, 'count': count}
 
+def threeD_dict(commits):
+	dct = author_weekday_dict(commits)
+	import plotly.express as px
+	import pandas as pd
+	fig = px.scatter_3d(pd.DataFrame.from_dict(dct), x='authors', y='hours', z='weekdays', color='count')
+	fig.show()
+
+def parallel_coords(commits):
+	dct = author_weekday_dict(commits)
 	import plotly.express as px
 	import pandas as pd
 
-	fig = px.scatter_3d(pd.DataFrame.from_dict(dct), x='authors', y='hours', z='weekdays', color='hours')
-	print(fig.show())
+	df = pd.DataFrame.from_dict(dct)
+	print(df)
+	# fig = px.parallel_coordinates(df, color='hours', color_continuous_scale=px.colors.diverging.Tealrose, color_continuous_midpoint=2,
+	# 	labels={'hours': 'Hour', 'authors': 'Authors', 'weekdays': 'Weekday'})
+	# fig.show()
+	# df = px.data.iris()
+	fig = px.parallel_coordinates(df[['hours']],
+	                             color_continuous_scale=px.colors.diverging.Tealrose,
+	                             color_continuous_midpoint=2)
+	fig.show()
 
 def author_weekday_3d(folder):
-	commits = get_commit_data(folder)
+	commits = get_commit_data(folder, 1000)
 	threeD_dict(commits)
 
 def weekday_resp(folder):
@@ -125,7 +144,8 @@ def authors_resp(folder):
 
 def main():
 	folder = 'react'
-	commits = get_commit_data(folder)
+	commits = get_commit_data(folder, 1000)
+	# parallel_coords(commits)
 	threeD_dict(commits)
 
 if __name__ == '__main__':
